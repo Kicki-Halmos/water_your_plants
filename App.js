@@ -1,21 +1,52 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+import HomeScreen from "./src/screens/HomeScreen";
+import AppLoading from "expo-app-loading";
+import { useFonts, GentiumBookBasic_700Bold, GentiumBookBasic_400Regular, } from "@expo-google-fonts/dev";
+import {Provider} from "./src/context/PlantContext";
+import EditPlantScreen from "./src/screens/EditPlantScreen";
+import AddPlantScreen from "./src/screens/AddPlantScreen";
+import PlantDetailScreen from './src/screens/PlantDetailScreen';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const navigator = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Add: AddPlantScreen,
+    Edit: EditPlantScreen,
+    Detail: PlantDetailScreen
   },
-});
+  {
+    initialRouteName: "Home",
+    defaultNavigationOptions: {
+      headerTitleStyle: {
+        alignSelf: "center",
+        color: "#075814",
+        fontFamily: "GentiumBookBasic_700Bold",
+        fontSize: 20
+      },
+      headerStyle: { backgroundColor: "#FCFBF0" },
+      title: "Water Your Plants",
+    },
+  }
+);
+
+const App = createAppContainer(navigator);
+
+export default () => {
+  let [fontsLoaded] = useFonts({
+    GentiumBookBasic_700Bold,
+    GentiumBookBasic_400Regular
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    // from the custom App we return the component we assigned to RootApp.
+    return (
+      <Provider>
+        <App />
+        </Provider>
+    );
+  }
+};
