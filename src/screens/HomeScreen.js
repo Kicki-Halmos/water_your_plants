@@ -12,13 +12,14 @@ import {Context} from "../context/PlantContext";
 
 export default HomeScreen = ({ navigation }) => {
   const {state, deletePlant, getPlants} = useContext(Context);
-  //console.log(state);
+  console.log(state);
 
   useEffect(() => {
     getPlants();
-
+    //console.log(state);
     const listener = navigation.addListener('didFocus', () =>{
       getPlants();
+      
     })
 
     return () => {
@@ -37,7 +38,7 @@ export default HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
       <FlatList 
       data={state} 
-      keyExtractor={(plant)=> plant.id.toString()}
+      keyExtractor={(plant)=> plant._id}
       renderItem={({item})=>{
         return (
           <View style={styles.viewStyle}>

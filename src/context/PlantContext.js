@@ -1,4 +1,4 @@
-import jsonServer from '../api/jsonServer';
+import plantServer from '../api/plantServer';
 import createDataContext from './createDataContext';
 
 
@@ -25,16 +25,18 @@ const plantReducer = (state, action) => {
     }
 };
 
-const getPlants = dispatch  => {
-     return async () => {
-         const response = await jsonServer.get('/plants');
+const getPlants = dispatch  => async () => {
+    try{
+         const response = await plantServer.get('/plants');
          dispatch({type: "get_plants", payload: response.data})
-     };
+    } catch(err) {
+        console.log(err.message);
+    }
 };
 
-const addPlant = dispatch => {
+const addPlant = () => {
     return async (name, water, fertilizer, shower, callback) => {
-        await jsonServer.post('/plants', {name, water, fertilizer, shower});
+        await plantServer.post('/plants', {name, water, fertilizer, shower});
         //dispatch({type: 'add_plant', payload: {name, water, fertilizer, shower}});
         if(callback) {callback()};
     }
@@ -43,7 +45,7 @@ const addPlant = dispatch => {
 
 const editPlant = dispatch => {
     return async (id, name, water, fertilizer, shower, callback) => {
-        await jsonServer.put(`/plants/${id}`, {name, water, fertilizer, shower});
+        await plantServer.put(`/plants/${id}`, {name, water, fertilizer, shower});
         dispatch({type: 'edit_plant', payload: {id, name, water, fertilizer, shower}})
         if(callback) {callback()};
     }
@@ -52,7 +54,7 @@ const editPlant = dispatch => {
 
 const deletePlant = (dispatch) => {
     return async (id) => {
-        await jsonServer.delete(`/plants/${id}`);
+        await plantServer.delete(`/plants/${id}`);
         dispatch({type: 'delete_plant', payload: id});
     };
 };
