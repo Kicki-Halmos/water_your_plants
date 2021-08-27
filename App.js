@@ -28,8 +28,8 @@ const switchNavigator = createSwitchNavigator({
     Add: AddPlantScreen,
     Edit: EditPlantScreen,
     Detail: PlantDetailScreen
-  })},
-    {
+  },
+  {
     //initialRouteName: "MainFlow",
     defaultNavigationOptions: {
       headerTitleStyle: {
@@ -40,7 +40,8 @@ const switchNavigator = createSwitchNavigator({
       },
       headerStyle: { backgroundColor: "#FCFBF0" },
       title: "Water Your Plants",
-    }},
+    }},)},
+  
   
 );
 

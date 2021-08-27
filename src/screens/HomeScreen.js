@@ -7,16 +7,20 @@ import {
   FlatList,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
-import {Context} from "../context/PlantContext";
+import {Context as PlantContext} from "../context/PlantContext";
+import {Context as AuthContext} from "../context/AuthContext";
+import Header from "../components/Header";
 
 
 export default HomeScreen = ({ navigation }) => {
-  const {state, deletePlant, getPlants} = useContext(Context);
-  console.log(state);
+  const {state, deletePlant, getPlants} = useContext(PlantContext);
+  //console.log(state);
+
+  const {signout} = useContext(AuthContext)
 
   useEffect(() => {
     getPlants();
-    //console.log(state);
+    
     const listener = navigation.addListener('didFocus', () =>{
       getPlants();
       
@@ -26,6 +30,8 @@ export default HomeScreen = ({ navigation }) => {
       listener.remove();
     }
   },[])
+
+
 
   return (
     <View style={styles.containerStyle}>
@@ -58,6 +64,16 @@ export default HomeScreen = ({ navigation }) => {
     </View>
   );
 };
+
+HomeScreen.navigationOptions = () => {
+  return {
+      headerRight: () => (
+       <Header />
+      ),
+    };
+};
+
+
 
 const styles = StyleSheet.create({
   containerStyle: {
