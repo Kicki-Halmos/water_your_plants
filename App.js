@@ -13,6 +13,7 @@ import SignupScreen from "./src/screens/SignupScreen";
 import SigninScreen from "./src/screens/SigninScreen";
 import { setNavigator } from "./src/helpers/navigationRef";
 import {Provider as AuthProvider} from './src/context/AuthContext';
+import * as Notifications from 'expo-notifications';
 
 
 const switchNavigator = createSwitchNavigator({
@@ -46,6 +47,14 @@ const switchNavigator = createSwitchNavigator({
 );
 
 const App = createAppContainer(switchNavigator);
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 export default () => {
   let [fontsLoaded] = useFonts({

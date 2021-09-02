@@ -1,5 +1,6 @@
 import plantServer from '../api/plantServer';
 import createDataContext from './createDataContext';
+import { setupPlantNotifications } from '../functions/notificationsHandler';
 
 
 const plantReducer = (state, action) => {
@@ -36,8 +37,11 @@ const getPlants = dispatch  => async () => {
 
 const addPlant = () => {
     return async (name, water, fertilizer, shower, callback) => {
-        await plantServer.post('/plants', {name, water, fertilizer, shower});
+        const response = await plantServer.post('/plants', {name, water, fertilizer, shower});
         //dispatch({type: 'add_plant', payload: {name, water, fertilizer, shower}});
+        const plant = await response.data;
+        setupPlantNotifications(plant)
+        //här ska jag kalla på en ny function som ska köra notifieringskoden
         if(callback) {callback()};
     }
 }

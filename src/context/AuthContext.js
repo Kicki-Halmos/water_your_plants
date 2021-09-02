@@ -33,12 +33,14 @@ const clearErrorMessage = dispatch => () => {
     dispatch({type:"clear_error_message"})
 }
 
-const signup = dispatch => async ({email, password}) => {
+const signup = dispatch => async ({email, password, expo_token}) => {
     //console.log(email + ' ' + password)
     try{
-        const response = await plantServer.post("/signup", {email, password});
-        await AsyncStorage.setItem("token", response.data.token);
+        const response = await plantServer.post("/signup", {email, password, expo_token});
+        console.log(response.data.user)
+        await AsyncStorage.multiSet([["token", response.data.token], ["expo_token", response.data.user.expo_token]]);
         dispatch({type: "signin", payload: response.data.token });
+        //setNotificationsToken(response.data.user);
         navigate('Home');
     } catch(err) {
         console.log(err);
@@ -50,9 +52,11 @@ const signup = dispatch => async ({email, password}) => {
 };
 
 const signin = dispatch => async({email,password}) => {
+    console.log(email + ' ' + password)
     try{
-        const response = await plantServer.post('(signin', {email,password});
-        await AsyncStorage.setItem("token", response.data.token);
+        const response = await plantServer.post("/signin", {email, password});
+        console.log(response.data);
+        await AsyncStorage.setItem("token", response.data.token, "user", response.data.user);
         dispatch({type:"signin", payload: response.data.token});
         navigate('Home');
     } catch(err){
@@ -69,6 +73,10 @@ const signout = dispatch => async () => {
     dispatch({type:"signout"});
     navigate('LoginFlow');
 };
+
+/*const setNotificationsToken = () => async () =>{
+    
+}*/
 
 export const {Provider, Context} = createDataContext(
     authReducer,
